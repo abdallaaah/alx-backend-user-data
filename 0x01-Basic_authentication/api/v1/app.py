@@ -22,6 +22,7 @@ if auth_type == 'auth':
 
 @app.before_request
 def before_request():
+    """this function execute before request"""
     if auth is None:
         return
     list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
