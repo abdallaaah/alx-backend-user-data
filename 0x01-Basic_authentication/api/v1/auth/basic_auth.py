@@ -2,8 +2,8 @@
 """Basic class inherit from the auth"""
 from .auth import Auth
 import base64
-import binascii
-
+from typing import TypeVar
+from models.user import User
 
 class BasicAuth(Auth):
     """Basic auth inherit from Auth"""
@@ -40,3 +40,21 @@ class BasicAuth(Auth):
             return (None, None)
         name, password = decoded_base64_authorization_header.split(':')
         return (name, password)
+
+    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        """check if user creadintails is on database and return user if yes"""
+        if not user_email or not user_pwd:
+            return None
+        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
+            return None
+
+        x = {'email': user_email}
+        users = User.search(x)
+        if users:
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+                else:
+                    return None
+
+
