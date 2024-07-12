@@ -24,7 +24,6 @@ if auth_type == 'session_auth':
     auth = SessionAuth()
 
 
-
 @app.before_request
 def before_request():
     """this function execute before request"""
@@ -68,7 +67,6 @@ def un_authenticate(error) -> str:
 
     """
     return jsonify({"error": "Forbidden"}), 403
-
 
 
 if __name__ == "__main__":
