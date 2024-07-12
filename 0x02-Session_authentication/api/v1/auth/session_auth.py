@@ -25,7 +25,6 @@ class SessionAuth(Auth):
         user_id = self.user_id_by_session_id.get(f'{session_id}')
         return user_id
 
-
     def current_user(self, request=None):
         """ddddd"""
         if not request:
@@ -39,5 +38,3 @@ class SessionAuth(Auth):
             return None
         current_user = User.get(user_id)
         return current_user
-
-
