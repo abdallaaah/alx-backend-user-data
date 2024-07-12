@@ -20,7 +20,7 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """retrive the value of the seession_id which is the user_id"""
-        if not session_id and not isinstance(session_id, str):
+        if not session_id or not isinstance(session_id, str):
             return None
         user_id = self.user_id_by_session_id.get(f'{session_id}')
         return user_id
@@ -34,10 +34,10 @@ class SessionAuth(Auth):
         session_id = self.session_cookie(request)
         if not session_id or not isinstance(session_id, str):
             return None
-        user_id = self.user_id_by_session_id.get('548c8076-35d3-4ee9-891e-ef41e1a922cf')
+        user_id = self.user_id_for_session_id(session_id)
         if not user_id:
             return None
-        print("the user id is",user_id, type(user_id))
+        print("the user id is", user_id, type(user_id))
         current_user = User.get(user_id)
         return current_user
 
