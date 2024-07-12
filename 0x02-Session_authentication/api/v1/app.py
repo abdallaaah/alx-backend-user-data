@@ -29,7 +29,8 @@ def before_request():
     """this function execute before request"""
     if auth is None:
         return
-    list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+    list = ['/api/v1/status/', '/api/v1/unauthorized/',
+            '/api/v1/forbidden/', '/api/v1/auth_session/login/']
     x = auth.require_auth(request.path, list)
     if not x:
         return
