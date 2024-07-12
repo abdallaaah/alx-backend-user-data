@@ -3,6 +3,7 @@
 from .auth import Auth
 import uuid
 
+
 class SessionAuth(Auth):
     """Basic auth inherit from Auth"""
     user_id_by_session_id = {}
@@ -15,4 +16,3 @@ class SessionAuth(Auth):
         session_id = str(uuid.uuid4())
         self.user_id_by_session_id.update({f"{session_id}": f"{user_id}"})
         return session_id
-
