@@ -38,6 +38,6 @@ class SessionAuth(Auth):
             if user_id:
                 print("the user id is",user_id, type(user_id))
                 current_user = User.get(user_id)
-            return current_user
+                return current_user
 
 
