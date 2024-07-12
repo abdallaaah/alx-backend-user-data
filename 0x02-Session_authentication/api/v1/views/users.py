@@ -42,7 +42,7 @@ def view_one_user(user_id: str = None) -> str:
     id = user_json_data.get('id')
     if id == user_id and not request.current_user:
         abort(404)
-    if id == user_id and request.current_user:
+    if user_id == id and request.current_user:
         return jsonify(user.to_json())
 
 
