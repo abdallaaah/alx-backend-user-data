@@ -5,6 +5,7 @@ import base64
 from typing import TypeVar
 from models.user import User
 
+
 class SessionAuth(Auth):
     """Basic auth inherit from Auth"""
     pass
