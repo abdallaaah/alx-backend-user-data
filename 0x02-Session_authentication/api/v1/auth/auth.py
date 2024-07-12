@@ -34,7 +34,7 @@ class Auth():
         return None
 
     def session_cookie(self, request=None):
-        """return cookie which hold the session_id"""
+        """return session id from the cookie"""
         if not request:
             return None
         session_name_env = os.getenv('SESSION_NAME')
