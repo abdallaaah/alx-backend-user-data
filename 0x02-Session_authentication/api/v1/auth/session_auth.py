@@ -37,7 +37,6 @@ class SessionAuth(Auth):
         user_id = self.user_id_for_session_id(session_id)
         if not user_id:
             return None
-        print("the user id is", user_id, type(user_id))
         current_user = User.get(user_id)
         return current_user
 
