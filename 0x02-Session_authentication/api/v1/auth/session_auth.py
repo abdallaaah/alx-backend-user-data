@@ -30,13 +30,13 @@ class SessionAuth(Auth):
         """ddddd"""
         if not request:
             return None
-        print("my rqqqqqqqq", request)
+        # print("my rqqqqqqqq", request)
         session_id = self.session_cookie(request)
         if session_id:
-            print("the session_id id is",session_id, type(session_id))
+            # print("the session_id id is",session_id, type(session_id))
             user_id = self.user_id_by_session_id(session_id)
             if user_id:
-                print("the user id is",user_id, type(user_id))
+                # print("the user id is",user_id, type(user_id))
                 current_user = User.get(user_id)
                 return current_user
 
