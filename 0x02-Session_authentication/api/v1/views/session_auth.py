@@ -7,7 +7,7 @@ import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def handel_routes_for_auth():
+def auth_session():
     """just for now return flask requesttt"""
     if request.method == 'POST':
         mail = request.form.get('email')
