@@ -6,7 +6,7 @@ from flask import request, jsonify, make_response
 import os
 
 
-@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+@app_views.route('/auth_session/login/', methods=['POST'], strict_slashes=False)
 def handel_routes_for_auth():
     """just for now return flask request"""
     if request.method == 'POST':
