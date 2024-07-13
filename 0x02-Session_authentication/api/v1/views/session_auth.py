@@ -19,8 +19,8 @@ def handel_routes_for_auth():
 
         email = {'email': mail}
         user = User.search(email)
-        if not user:
-            return jsonify({ "error": "no user found for this email" })
+        if not user[0]:
+            return jsonify({"error": "no user found for this email"})
         if user[0].is_valid_password(passwrod):
             from api.v1.app import auth
             session_id = auth.create_session(user[0].id)
