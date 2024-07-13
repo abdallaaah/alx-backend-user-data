@@ -17,7 +17,7 @@ def return_current_user():
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def view_all_users() -> str:
     """ GET /api/v1/users
-    Return:
+    Return:i
       - list of all User objects JSON represented
     """
     all_users = [user.to_json() for user in User.all()]
