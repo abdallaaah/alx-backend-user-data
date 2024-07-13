@@ -12,14 +12,14 @@ def handel_routes_for_auth():
     if request.method == 'POST':
         mail = request.form.get('email')
         if not mail:
-            return jsonify({ "error": "email missing" }), 401
+            return jsonify({"error": "email missing"}), 401
         passwrod = request.form.get('password')
         if not passwrod:
             return jsonify({"error": "password missing"}), 400
 
         email = {'email': mail}
         user = User.search(email)
-        if not user[0]:
+        if not user:
             return jsonify({"error": "no user found for this email"})
         if user[0].is_valid_password(passwrod):
             from api.v1.app import auth
