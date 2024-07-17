@@ -52,3 +52,18 @@ class DB:
             return user
         except (NoResultFound and InvalidRequestError) as e:
             raise e
+
+    def update_user(self, id, **kwargs) -> None:
+        """update user"""
+        session = self.__session
+        user = self.find_user_by(id=id)
+        for key, item in kwargs.items():
+            keyy = key
+            password = item
+        columns = [column.name for column in inspect(User).c]
+        if keyy not in columns:
+            raise InvalidRequestError()
+
+        user.hashed_password = password
+        session.commit()
+        return None
