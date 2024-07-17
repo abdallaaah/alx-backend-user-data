@@ -62,7 +62,7 @@ class DB:
             password = item
         columns = [column.name for column in inspect(User).c]
         if keyy not in columns:
-            raise InvalidRequestError()
+            raise ValueError
 
         user.hashed_password = password
         session.commit()
