@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-
 from user import Base, User
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.inspection import inspect
 
 
 class DB:
@@ -37,3 +39,16 @@ class DB:
         session.add(new_user)
         session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """find user by it is email"""
+        session = self.__session
+        columns = [column.name for column in inspect(User).c]
+        for key in kwargs:
+            if key not in columns:
+                raise InvalidRequestError()
+        try:
+            user = session.query(User).filter_by(**kwargs).one()
+            return user
+        except (NoResultFound and InvalidRequestError) as e:
+            raise e
