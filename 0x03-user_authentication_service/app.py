@@ -32,7 +32,7 @@ def users():
             return jsonify({"message": "email already registered"}), 400
 
 
-@app.route("/sessions", methods=["POST"], strict_slashes=False)
+@app.route("/sessions", methods=['POST'], strict_slashes=False)
 def login() -> Response:
     """login function"""
     if request.method == "POST":
@@ -43,9 +43,12 @@ def login() -> Response:
             if not x:
                 abort(401)
             session_id = auth.create_session(email)
-            response = jsonify({"email": email, "message": "logged in"}), 200
-            response.set_cookie("session_id", session_id)
-            return response
+            if session_id:
+                response = jsonify({"email": email, "message": "logged in"}), 200
+                response.set_cookie("session_id", session_id)
+                return response
+            else:
+                abort(401)
         except NoResultFound:
             abort(401)
 
