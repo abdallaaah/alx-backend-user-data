@@ -56,13 +56,16 @@ class DB:
     def update_user(self, id, **kwargs) -> None:
         """update user"""
         session = self.__session
-        for key, item in kwargs.items():
-            keyy = key
-            password = item
-        columns = [column.name for column in inspect(User).c]
-        if keyy not in columns or not isinstance(id, int):
-            raise ValueError
-        user = self.find_user_by(id=id)
-        user.hashed_password = password
-        session.commit()
+        if kwargs:
+            for key, item in kwargs.items():
+                keyy = key
+                password = item
+            columns = [column.name for column in inspect(User).c]
+            if keyy not in columns or not isinstance(id, int):
+                raise ValueError
+            user = self.find_user_by(id=id)
+            if user:
+                if password:
+                    user.hashed_password = str(password)
+                    session.commit()
         return None
