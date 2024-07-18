@@ -22,12 +22,12 @@ def users():
         password = request.form['password']
 
         try:
+            paylod = {"email": f"{email}", "message": "user created"}
+            return jsonify(paylod)
+        except ValueError:
             user = auth.register_user(email, password)
             if user:
                 return jsonify({"message": "email already registered"}), 400
-        except ValueError:
-            paylod = {"email": f"{user.email}", "message": "user created"}
-            return jsonify(paylod)
 
 
 if __name__ == "__main__":
