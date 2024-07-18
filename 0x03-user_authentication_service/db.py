@@ -53,7 +53,7 @@ class DB:
         except (NoResultFound and InvalidRequestError) as e:
             raise e
 
-    def update_user(self, id: int, **kwargs: dict) -> None:
+    def update_user(self, id, **kwargs) -> None:
         """update user"""
         session = self.__session
         user = self.find_user_by(id=id)
