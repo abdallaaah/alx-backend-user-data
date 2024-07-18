@@ -23,7 +23,7 @@ class Auth:
             hash = bcrypt.hashpw(bytes, salt)
             return hash
 
-    def register_user(self, email, password):
+    def register_user(self, email: str, password: str) -> any:
         """regestir user function """
         try:
             user = self._db.find_user_by(email=email)
@@ -33,6 +33,3 @@ class Auth:
             hash = self._hash_password(password)
             user = self._db.add_user(email, hash)
             return user
-
-        if not user:
-            print('no useeeeer')
