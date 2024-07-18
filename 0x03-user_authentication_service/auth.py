@@ -26,7 +26,8 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> user.User or ValueError:
+    def register_user(self, email: str, password: str)\
+            -> user.User or ValueError:
         """regestir user function """
         try:
             user = self._db.find_user_by(email=email)
