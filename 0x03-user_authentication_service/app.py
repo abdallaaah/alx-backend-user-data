@@ -50,8 +50,6 @@ def login() -> Response:
         return response
     except NoResultFound:
         abort(401)
-    except InvalidRequestError:
-        abort(400)
 
 
 if __name__ == "__main__":
