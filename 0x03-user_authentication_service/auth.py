@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """"auth function """
+import user
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -25,7 +26,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> any:
+    def register_user(self, email: str, password: str) -> user.User or ValueError:
         """regestir user function """
         try:
             user = self._db.find_user_by(email=email)
