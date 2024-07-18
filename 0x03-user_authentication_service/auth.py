@@ -3,7 +3,7 @@
 import bcrypt
 
 
-def _hash_password(password: str):
+def _hash_password(password: str) -> bytes:
     """return hasehd password from the saulted password
     utf-8 password -> salted (random text added to password)
     -> hash the salt
