@@ -12,6 +12,7 @@ from sqlalchemy.inspection import inspect
 from typing import Any, Dict
 import uuid
 
+
 class DB:
     """DB class
     """
@@ -34,40 +35,42 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """add user to users table"""
+        """Add user to users table"""
         new_user = User(email=email, hashed_password=hashed_password)
         session = self._session
         session.add(new_user)
         session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs) -> User:
-        """find user by it is email"""
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
+        """Find a user by specified attributes.
+
+        Raises:
+            error: NoResultFound: When no results are found.
+            error: InvalidRequestError: When invalid query arguments are passed
+
+        Returns:
+            User: First row found in the `users` table.
+        """
         session = self._session
-        columns = [column.name for column in inspect(User).c]
-        for key in kwargs:
-            if key not in columns:
-                raise InvalidRequestError()
         try:
             user = session.query(User).filter_by(**kwargs).one()
-            return user
-        except (NoResultFound and InvalidRequestError) as e:
-            raise e
+        except NoResultFound:
+            raise NoResultFound()
+        except InvalidRequestError:
+            raise InvalidRequestError()
+        return user
 
     def update_user(self, id: int, **kwargs: Dict[str, Any]) -> None:
-        """update user"""
-        session = self.__session
+        """Update user"""
+        session = self._session
         user = self.find_user_by(id=id)
         if user:
             if kwargs:
-                for key, item in kwargs.items():
-                    keyy = key
-                    password = item
                 columns = [column.name for column in inspect(User).c]
-                if keyy not in columns:
-                    raise ValueError
-                if user:
-                    if password:
-                        user.hashed_password = str(password)
-                        session.commit()
+                for key, value in kwargs.items():
+                    if key not in columns:
+                        raise ValueError(f"Invalid column name: {key}")
+                    setattr(user, key, value)
+                session.commit()
         return None

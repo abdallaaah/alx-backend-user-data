@@ -39,23 +39,27 @@ class Auth:
         """regestir user function """
         try:
             user = self._db.find_user_by(email=email)
-            raise ValueError(f'User {user.email} already exists')
+            if user:
+                raise ValueError(f'User {email} already exists')
 
         except NoResultFound:
             hash = _hash_password(password)
             user = self._db.add_user(email, hash)
+
             return user
 
     def valid_login(self, email: str, password: str) -> bool:
-        """check is valid login or not"""
+        """Check if the login is valid."""
         try:
             user = self._db.find_user_by(email=email)
-            password = password.encode('utf-8')
-            if bcrypt.checkpw(password, user.hashed_password):
-                return True
-            else:
-                return False
-        except NoResultFound and InvalidRequestError:
+            if user:
+                # Compare the provided password with the stored hashed password
+                if bcrypt.checkpw(password.encode('utf-8'),
+                                  user.hashed_password):
+                    return True
+                else:
+                    return False
+        except NoResultFound:
             return False
 
     def create_session(self, email: str) -> str or None:
@@ -64,6 +68,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
             session_id = _generate_uuid()
             user.session_id = session_id
-            return user.session_id
+            self._db.update_user(id=user.id, session_id=session_id)
+            return session_id
         except NoResultFound and InvalidRequestError:
             return None

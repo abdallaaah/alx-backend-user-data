@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """app flask point"""
-from flask import Flask, jsonify, request
+import flask
+from flask import Flask, jsonify, request, abort
 from auth import Auth
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 app = Flask(__name__)
 auth = Auth()
@@ -16,18 +19,36 @@ def index():
 
 @app.route("/users", methods=['POST'], strict_slashes=False)
 def users():
-    """"""
+    """create user if email doesn't exist"""
     if request.method == 'POST':
         email = request.form.get('email')
-        password = request.form['password']
+        password = request.form.get('password')
 
         try:
-            paylod = {"email": f"{email}", "message": "user created"}
+            user = auth.register_user(email, password)
+            print(user.email)
+            paylod = {"email": email, "message": "user created"}
             return jsonify(paylod)
         except ValueError:
-            user = auth.register_user(email, password)
-            if user:
-                return jsonify({"message": "email already registered"}), 400
+            return jsonify({"message": "email already registered"}), 400
+
+
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        try:
+            x = auth.valid_login(email, password)
+            if not x:
+                abort(401)
+
+            session_id = auth.create_session(email)
+            response = jsonify({"email": email, "message": "logged in"})
+            response.set_cookie("session_id", session_id)
+            return response
+        except NoResultFound:
+            abort(401)
 
 
 if __name__ == "__main__":
