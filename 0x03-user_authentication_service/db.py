@@ -10,7 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.inspection import inspect
 from typing import Any, Dict
-
+import uuid
 
 class DB:
     """DB class
