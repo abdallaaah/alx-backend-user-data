@@ -21,9 +21,9 @@ def _hash_password(password: str) -> bytes:
         return hash
 
 
-def _generate_uuid() -> bytes:
+def _generate_uuid() -> str:
     """return id to user"""
-    id = uuid.uuid4()
+    id = str(uuid.uuid4())
     return id
 
 
