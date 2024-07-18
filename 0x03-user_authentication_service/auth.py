@@ -57,3 +57,14 @@ class Auth:
                 return False
         except NoResultFound and InvalidRequestError:
             return False
+
+
+    def create_session(self, email) -> bytes or None:
+        """create session is mail is valid"""
+        try:
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            user.session_id = session_id
+            return user.session_id
+        except NoResultFound and InvalidRequestError:
+            return None
