@@ -42,7 +42,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """find user by it is email"""
-        session = self.__session
+        session = self._session
         columns = [column.name for column in inspect(User).c]
         for key in kwargs:
             if key not in columns:
