@@ -9,7 +9,7 @@ from user import Base, User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.inspection import inspect
-from typing_extensions import Unpack
+
 
 class DB:
     """DB class
@@ -56,6 +56,7 @@ class DB:
     def update_user(self, id: int, **kwargs: dict) -> None:
         """update user"""
         session = self.__session
+        user = self.find_user_by(id=id)
         if kwargs:
             for key, item in kwargs.items():
                 keyy = key
@@ -63,7 +64,6 @@ class DB:
             columns = [column.name for column in inspect(User).c]
             if keyy not in columns or not isinstance(id, int):
                 raise ValueError
-            user = self.find_user_by(id=id)
             if user:
                 if password:
                     user.hashed_password = str(password)
