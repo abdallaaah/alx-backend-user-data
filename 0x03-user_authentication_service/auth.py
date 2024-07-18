@@ -22,7 +22,7 @@ def _hash_password(password: str) -> bytes:
 
 
 def _generate_uuid() -> str:
-    """return id to user"""
+    """generate random uuid.4 for user session_id """
     id = str(uuid.uuid4())
     return id
 
@@ -58,8 +58,7 @@ class Auth:
         except NoResultFound and InvalidRequestError:
             return False
 
-
-    def create_session(self, email: str) -> bytes or None:
+    def create_session(self, email: str) -> str or None:
         """create session is mail is valid"""
         try:
             user = self._db.find_user_by(email=email)
