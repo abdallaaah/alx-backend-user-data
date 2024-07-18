@@ -9,7 +9,7 @@ from user import Base, User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.inspection import inspect
-
+from typing_extensions import Unpack
 
 class DB:
     """DB class
@@ -53,7 +53,7 @@ class DB:
         except (NoResultFound and InvalidRequestError) as e:
             raise e
 
-    def update_user(self, id, **kwargs) -> None:
+    def update_user(self, id: int, **kwargs: dict) -> None:
         """update user"""
         session = self.__session
         if kwargs:
@@ -66,6 +66,7 @@ class DB:
             user = self.find_user_by(id=id)
             if user:
                 if password:
+                    print(password)
                     user.hashed_password = str(password)
                     session.commit()
         return None
