@@ -57,15 +57,16 @@ class DB:
         """update user"""
         session = self.__session
         user = self.find_user_by(id=id)
-        if kwargs:
-            for key, item in kwargs.items():
-                keyy = key
-                password = item
-            columns = [column.name for column in inspect(User).c]
-            if keyy not in columns or not isinstance(id, int):
-                raise ValueError
-            if user:
-                if password:
-                    user.hashed_password = str(password)
-                    session.commit()
+        if user:
+            if kwargs:
+                for key, item in kwargs.items():
+                    keyy = key
+                    password = item
+                columns = [column.name for column in inspect(User).c]
+                if keyy not in columns:
+                    raise ValueError
+                if user:
+                    if password:
+                        user.hashed_password = str(password)
+                        session.commit()
         return None
