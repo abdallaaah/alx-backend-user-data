@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """"auth function """
-import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
+import bcrypt
 
 
 class Auth:
@@ -30,6 +30,7 @@ class Auth:
             raise ValueError(f'User {user.email} already exists')
 
         except NoResultFound:
-            hash = self._hash_password(password)
-            user = self._db.add_user(email, hash)
-            return user
+            pass
+        hash = self._hash_password(password)
+        user = self._db.add_user(email, hash)
+        return user
