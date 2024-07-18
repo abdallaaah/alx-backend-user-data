@@ -43,12 +43,9 @@ def login() -> Response:
             if not x:
                 abort(401)
             session_id = auth.create_session(email)
-            if session_id:
-                response = jsonify({"email": email, "message": "logged in"}), 200
-                response.set_cookie("session_id", session_id)
-                return response
-            else:
-                abort(401)
+            response = jsonify({"email": email, "message": "logged in"}), 200
+            response.set_cookie("session_id", session_id)
+            return response
         except NoResultFound:
             abort(401)
 
