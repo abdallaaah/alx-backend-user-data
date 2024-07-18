@@ -66,7 +66,6 @@ class DB:
             user = self.find_user_by(id=id)
             if user:
                 if password:
-                    print(password)
                     user.hashed_password = str(password)
                     session.commit()
         return None
