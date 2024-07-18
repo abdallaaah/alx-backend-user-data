@@ -2,6 +2,7 @@
 """"auth function """
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 import bcrypt
 
 
@@ -34,3 +35,15 @@ class Auth:
             hash = _hash_password(password)
             user = self._db.add_user(email, hash)
             return user
+
+    def valid_login(self, email, password):
+        """check is valid login or not"""
+        try:
+            user = self._db.find_user_by(email=email)
+            password = password.encode('utf-8')
+            if bcrypt.checkpw(password, user.hashed_password):
+                return True
+            else:
+                return False
+        except NoResultFound and InvalidRequestError:
+            return False
