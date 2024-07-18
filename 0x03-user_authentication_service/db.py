@@ -9,6 +9,7 @@ from user import Base, User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.inspection import inspect
+from typing import Dict
 
 
 class DB:
@@ -53,7 +54,7 @@ class DB:
         except (NoResultFound and InvalidRequestError) as e:
             raise e
 
-    def update_user(self, id: int, **kwargs) -> None:
+    def update_user(self, id: int, **kwargs: Dict) -> None:
         """update user"""
         session = self.__session
         user = self.find_user_by(id=id)
