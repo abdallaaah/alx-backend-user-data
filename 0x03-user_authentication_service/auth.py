@@ -70,5 +70,5 @@ class Auth:
             user.session_id = session_id
             self._db.update_user(id=user.id, session_id=session_id)
             return session_id
-        except NoResultFound and InvalidRequestError:
+        except (NoResultFound, InvalidRequestError):
             return None

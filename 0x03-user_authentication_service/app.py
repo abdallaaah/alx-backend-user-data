@@ -48,7 +48,7 @@ def login() -> Response:
         response = jsonify({"email": email, "message": "logged in"})
         response.set_cookie("session_id", session_id)
         return response, 200
-    except NoResultFound:
+    except (NoResultFound, InvalidRequestError):
         abort(401)
 
 
