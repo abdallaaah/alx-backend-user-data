@@ -34,11 +34,7 @@ def users():
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> Response:
-    """Log in a user and create a session.
-
-    Returns:
-        Response: The Flask Response object with a JSON message and session ID if login is successful.
-    """
+    """Log in a user and create a session """
     email = request.form.get("email")
     password = request.form.get("password")
 
