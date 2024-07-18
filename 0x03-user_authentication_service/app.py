@@ -26,7 +26,6 @@ def users():
 
         try:
             user = auth.register_user(email, password)
-            print(user.email)
             paylod = {"email": email, "message": "user created"}
             return jsonify(paylod)
         except ValueError:
@@ -42,11 +41,9 @@ def login() -> Response:
             x = auth.valid_login(email, password)
             if not x:
                 abort(401)
-
             session_id = auth.create_session(email)
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)
-            print(type(response))
             return response
         except NoResultFound:
             abort(401)
