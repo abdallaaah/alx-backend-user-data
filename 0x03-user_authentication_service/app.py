@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """app flask point"""
 import flask
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, Response
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -34,7 +34,7 @@ def users():
 
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
-def login():
+def login() -> Response:
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -46,6 +46,7 @@ def login():
             session_id = auth.create_session(email)
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)
+            print(type(response))
             return response
         except NoResultFound:
             abort(401)
