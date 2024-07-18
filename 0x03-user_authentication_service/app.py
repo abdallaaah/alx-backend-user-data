@@ -34,32 +34,19 @@ def users():
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> Response:
-    """Log in a user and create a session.
-
-    Returns:
-        Response: The Flask Response object with a JSON message and session ID if login is successful.
-    """
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-    if not email or not password:
-        abort(400, description="Email and password are required.")
-
-    if not auth.valid_login(email, password):
-        abort(401)
-
-    try:
-        session_id = auth.create_session(email)
-        if not session_id:
-            abort(401, description="Session creation failed.")
-
-        response = jsonify({"email": email, "message": "logged in"})
-        response.set_cookie("session_id", session_id)
-        return response
-    except NoResultFound:
-        abort(401)
-    except InvalidRequestError:
-        abort(400, description="Invalid request.")
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        try:
+            x = auth.valid_login(email, password)
+            if not x:
+                abort(401)
+            session_id = auth.create_session(email)
+            response = jsonify({"email": email, "message": "logged in"}), 200
+            response.set_cookie("session_id", session_id)
+            return response
+        except NoResultFound:
+            abort(401)
 
 
 if __name__ == "__main__":
