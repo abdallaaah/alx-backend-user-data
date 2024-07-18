@@ -42,24 +42,20 @@ def login() -> Response:
     email = request.form.get("email")
     password = request.form.get("password")
 
-    if not email or not password:
-        abort(400, description="Email and password are required.")
-
     if not auth.valid_login(email, password):
         abort(401)
 
     try:
         session_id = auth.create_session(email)
         if not session_id:
-            abort(401, description="Session creation failed.")
-
+            abort(401)
         response = jsonify({"email": email, "message": "logged in"})
         response.set_cookie("session_id", session_id)
         return response
     except NoResultFound:
         abort(401)
     except InvalidRequestError:
-        abort(400, description="Invalid request.")
+        abort(400)
 
 
 if __name__ == "__main__":
