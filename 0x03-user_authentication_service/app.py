@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """app flask point"""
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from auth import Auth
 
 app = Flask(__name__)
+auth = Auth()
 
 
 @app.route("/", methods=['GET'])
@@ -12,5 +14,21 @@ def index():
     return jsonify(payload)
 
 
+@app.route("/users", methods=['POST'], strict_slashes=False)
+def users():
+    """"""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form['password']
+
+        try:
+            user = auth.register_user(email, password)
+            if user:
+                return jsonify({"message": "email already registered"}), 400
+        except ValueError:
+            paylod = {"email": f"{user.email}", "message": "user created"}
+            return jsonify(paylod)
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=1)
