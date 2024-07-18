@@ -34,6 +34,7 @@ def users():
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> Response:
+    """login function"""
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
