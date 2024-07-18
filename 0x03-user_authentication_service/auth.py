@@ -27,7 +27,7 @@ class Auth:
         """regestir user function """
         try:
             user = self._db.find_user_by(email=email)
-            raise ValueError(f'User {email} already exists')
+            raise ValueError(f'User {user.email} already exists')
 
         except NoResultFound:
             hash = self._hash_password(password)
