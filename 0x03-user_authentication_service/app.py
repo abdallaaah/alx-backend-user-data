@@ -65,7 +65,7 @@ def logout():
             else:
                 auth.destroy_session(int(user.id))
                 return redirect(url_for('index'))
-        except (NoResultFound, InvalidRequestError):
+        except NoResultFound:
             abort(403)
 
 
