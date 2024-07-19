@@ -58,9 +58,6 @@ def logout():
     """User destroys session"""
     if request.method == 'DELETE':
         session_id = request.cookies.get("session_id")
-        if session_id is None:
-            abort(403)
-
         try:
             user = auth.get_user_from_session_id(str(session_id))
             if not user:
