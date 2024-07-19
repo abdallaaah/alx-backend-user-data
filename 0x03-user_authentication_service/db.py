@@ -61,19 +61,10 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, id: int, **kwargs) -> None:
-        """Find a user by specified attributes.
-
-                Raises:
-                    NoResultFound: When no results are found.
-                    InvalidRequestError:
-                    When invalid query arguments are passed
-
-                Returns:
-                    User: First row found in the `users` table.
-                """
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """take user id and check if exist update the value of the user"""
         session = self._session
-        user = self.find_user_by(id=id)
+        user = self.find_user_by(id=user_id)
         if user:
             if kwargs:
                 columns = [column.name for column in inspect(User).c]
