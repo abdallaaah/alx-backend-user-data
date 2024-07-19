@@ -14,13 +14,11 @@ auth = Auth()
 def logout():
     """user destrou session"""
     session_id = request.cookies.get("session_id")
-    try:
-        user = auth.get_user_from_session_id(session_id)
-        auth.destroy_session(user.id)
-        redirect(url_for('index'))
-    except (NoResultFound, InvalidRequestError):
-        abort(403)
 
+    user = auth.get_user_from_session_id(session_id)
+    if user in None:
+        abort(403)
+    return redirect("/")
 
 @app.route("/", methods=['GET'])
 def index():
