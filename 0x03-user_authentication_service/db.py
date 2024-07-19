@@ -62,7 +62,16 @@ class DB:
         return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """take user id and check if exist update the value of the user"""
+        """Find a user by specified attributes.
+
+                Raises:
+                    NoResultFound: When no results are found.
+                    InvalidRequestError:
+                    When invalid query arguments are passed
+
+                Returns:
+                    User: First row found in the `users` table.
+                """
         session = self._session
         user = self.find_user_by(id=user_id)
         if user:
