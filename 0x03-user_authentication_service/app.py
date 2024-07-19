@@ -60,7 +60,7 @@ def logout() -> str:
         session_id = request.cookies.get("session_id")
         try:
             user = auth.get_user_from_session_id(str(session_id))
-            if not user:
+            if user in None:
                 abort(403)
             else:
                 auth.destroy_session(int(user.id))
