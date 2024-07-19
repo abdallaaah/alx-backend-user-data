@@ -10,8 +10,6 @@ from sqlalchemy.inspection import inspect
 from typing import Any, Dict
 from user import Base, User
 from sqlalchemy.orm.session import Session
-
-
 class DB:
     """DB class
     """
@@ -61,11 +59,11 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, id: None, **kwargs: Dict[str, Any]) -> None:
+    def update_user(self, id: int, **kwargs: Dict[str, Any]) -> None:
         """Update user"""
-        print(f"the type of update user is {type(id)}")
         session = self._session
         user = self.find_user_by(id=id)
+        print('updateeeeeee', user)
         if user:
             if kwargs:
                 columns = [column.name for column in inspect(User).c]
@@ -74,6 +72,7 @@ class DB:
                         raise ValueError(f"Invalid column name: {key}")
                     if key == 'session_id':
                         user.session_id = value
+                    print(f"the key is {key}, value is {value}")
                     setattr(user, key, value)
                 session.commit()
         return None
