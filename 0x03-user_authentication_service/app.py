@@ -70,8 +70,6 @@ def logout() -> str:
         except (NoResultFound, InvalidRequestError):
             abort(403)
 
-# @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-# def profile()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=1)
