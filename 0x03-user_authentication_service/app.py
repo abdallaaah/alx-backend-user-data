@@ -56,20 +56,21 @@ def login() -> str:
 @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
 def logout():
     """User destroys session"""
-    session_id = request.cookies.get("session_id")
-    print(session_id)
-    if session_id is None:
-        abort(403)
-
-    try:
-        user = auth.get_user_from_session_id(str(session_id))
-        if not user:
+    if request.method == 'DELETE':
+        session_id = request.cookies.get("session_id")
+        print(session_id)
+        if session_id is None:
             abort(403)
-        else:
-            auth.destroy_session(int(user.id))
-            return redirect(url_for('index'))
-    except (NoResultFound, InvalidRequestError):
-        abort(403)
+
+        try:
+            user = auth.get_user_from_session_id(str(session_id))
+            if not user:
+                abort(403)
+            else:
+                auth.destroy_session(int(user.id))
+                return redirect(url_for('index'))
+        except (NoResultFound, InvalidRequestError):
+            abort(403)
 
 
 if __name__ == "__main__":
