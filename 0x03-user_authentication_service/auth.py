@@ -91,7 +91,7 @@ class Auth:
             user_id = int(user_id)
             user = self._db.find_user_by(id=user_id)
             user.session_id = None
-            self._db.update_user(user_id)
+            self._db.update_user(user_id, session_id=None)
         except (NoResultFound, InvalidRequestError):
             return None
         return None
