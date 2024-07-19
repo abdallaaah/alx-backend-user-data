@@ -10,16 +10,6 @@ app = Flask(__name__)
 auth = Auth()
 
 
-@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-def logout():
-    """user destrou session"""
-    session_id = request.cookies.get("session_id")
-
-    user = auth.get_user_from_session_id(session_id)
-    if user in None:
-        abort(403)
-    return redirect("/")
-
 @app.route("/", methods=['GET'])
 def index():
     """start point of flask"""
@@ -60,6 +50,17 @@ def login() -> str:
         return response, 200
     except (NoResultFound, InvalidRequestError):
         abort(401)
+
+
+@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """user destrou session"""
+    session_id = request.cookies.get("session_id")
+
+    user = auth.get_user_from_session_id(session_id)
+    if user in None:
+        abort(403)
+    return redirect("/")
 
 
 
