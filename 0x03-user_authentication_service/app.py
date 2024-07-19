@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """app flask point"""
 import flask
-from flask import Flask, jsonify, request, abort, Response
+from flask import Flask, jsonify, request, abort, Response, url_for
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -50,6 +50,19 @@ def login() -> str:
         return response, 200
     except (NoResultFound, InvalidRequestError):
         abort(401)
+
+@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """user destrou session"""
+    session_id = request.cookie.get("session_id")
+    try:
+        user = auth.get_user_from_session_id(session_id)
+        auth.destroy_session(user.id)
+        if user:
+            redirect(url_for(index))
+    except (NoResultFound, InvalidRequestError):
+        abort(403)
+
 
 
 if __name__ == "__main__":
