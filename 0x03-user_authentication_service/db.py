@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
-from user import Base, User
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.inspection import inspect
 from typing import Any, Dict
-import uuid
+from user import Base, User
+from sqlalchemy.orm.session import Session
 
 
 class DB:
@@ -20,7 +19,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -36,18 +35,19 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add user to users table"""
-        new_user = User(email=email, hashed_password=hashed_password)
         session = self._session
+        new_user = User(email=email, hashed_password=hashed_password)
         session.add(new_user)
         session.commit()
+        # self._Session.remove()
         return new_user
 
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """Find a user by specified attributes.
 
         Raises:
-            error: NoResultFound: When no results are found.
-            error: InvalidRequestError: When invalid query arguments are passed
+            NoResultFound: When no results are found.
+            InvalidRequestError: When invalid query arguments are passed
 
         Returns:
             User: First row found in the `users` table.
@@ -61,8 +61,9 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, id: int, **kwargs: Dict[str, Any]) -> None:
+    def update_user(self, id: None, **kwargs: Dict[str, Any]) -> None:
         """Update user"""
+        print(f"the type of update user is {type(id)}")
         session = self._session
         user = self.find_user_by(id=id)
         if user:
@@ -71,6 +72,8 @@ class DB:
                 for key, value in kwargs.items():
                     if key not in columns:
                         raise ValueError(f"Invalid column name: {key}")
+                    if key == 'session_id':
+                        user.session_id = value
                     setattr(user, key, value)
                 session.commit()
         return None

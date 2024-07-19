@@ -69,6 +69,8 @@ class Auth:
             session_id = _generate_uuid()
             user.session_id = session_id
             self._db.update_user(id=user.id, session_id=session_id)
+            x = self._db.find_user_by(email=email)
+            print('saveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed', x.session_id)
             return session_id
         except (NoResultFound, InvalidRequestError):
             return None
@@ -79,6 +81,8 @@ class Auth:
             return None
         try:
             user = self._db.find_user_by(session_id=session_id)
+            if not user:
+                return None
         except NoResultFound:
             return None
         except InvalidRequestError:

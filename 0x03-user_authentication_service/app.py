@@ -40,11 +40,13 @@ def login() -> str:
         password = request.form.get("password")
 
         if not auth.valid_login(email, password):
+            print('nyyyyyyyyyyyyyyyyyyyt')
             abort(401)
 
         try:
             session_id = auth.create_session(email)
             if not session_id:
+                print('nooooooooooooooooooot')
                 abort(401)
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)
@@ -74,16 +76,26 @@ def logout() -> str:
 @app.route("/profile", methods=['GET'], strict_slashes=False)
 def profile():
     """check profile for the route"""
-    if not session_id:
-        abort(403)
     session_id = request.cookies.get("session_id")
+    user = auth.get_user_from_session_id(session_id)
+    print('typeeeeeee', type(session_id))
+    if not session_id:
+        print('aaaaaaaaaaaaaaaaaaaaa')
+        abort(403)
+
     try:
         user = auth.get_user_from_session_id(session_id)
+        print('xxxxxxxxxxxxxx', user)
         if not user:
+            print(f"my session id is {session_id}")
+            print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+
             abort(403)
         else:
             return jsonify({"email": user.email}), 200
     except (NoResultFound, InvalidRequestError):
+        print('cccccccccccccccccccccccccccccc')
+
         abort(403)
 
 
