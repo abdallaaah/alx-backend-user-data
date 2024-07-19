@@ -61,8 +61,16 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, id: None, **kwargs: Dict[str, Any]) -> None:
-        """check if user found put the values to user"""
+    def update_user(self, id: int, **kwargs: Dict[str, int]) -> None:
+         """Find a user by specified attributes.
+
+        Raises:
+            NoResultFound: When no results are found.
+            InvalidRequestError: When invalid query arguments are passed
+
+        Returns:
+            User: First row found in the `users` table.
+        """
         session = self._session
         user = self.find_user_by(id=id)
         if user:
