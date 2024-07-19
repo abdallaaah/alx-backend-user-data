@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """app flask point"""
 import flask
-from flask import Flask, jsonify, request, abort, Response, url_for
+from flask import Flask, jsonify, request, abort, Response, url_for, redirect
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -35,34 +35,39 @@ def users():
 @app.route("/sessions", methods=['POST'], strict_slashes=False)
 def login() -> str:
     """Log in a user and create a session """
-    email = request.form.get("email")
-    password = request.form.get("password")
+    if request.method == 'POST':
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-    if not auth.valid_login(email, password):
-        abort(401)
-
-    try:
-        session_id = auth.create_session(email)
-        if not session_id:
+        if not auth.valid_login(email, password):
             abort(401)
-        response = jsonify({"email": email, "message": "logged in"})
-        response.set_cookie("session_id", session_id)
-        return response, 200
-    except (NoResultFound, InvalidRequestError):
-        abort(401)
+
+        try:
+            session_id = auth.create_session(email)
+            if not session_id:
+                abort(401)
+            response = jsonify({"email": email, "message": "logged in"})
+            response.set_cookie("session_id", session_id)
+            return response, 200
+        except (NoResultFound, InvalidRequestError):
+            abort(401)
 
 
 @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
 def logout():
-    """User destroys session """
+    """User destroys session"""
     session_id = request.cookies.get("session_id")
+    print(session_id)
     if session_id is None:
         abort(403)
 
     try:
-        user = auth.get_user_from_session_id(session_id)
-        auth.destroy_session(user.id)
-        return redirect(url_for('index'))  # Assuming you have an endpoint named 'index'
+        user = auth.get_user_from_session_id(str(session_id))
+        if not user:
+            abort(401)
+        else:
+            auth.destroy_session(int(user.id))
+            return redirect(url_for('index'))
     except (NoResultFound, InvalidRequestError):
         abort(403)
 
