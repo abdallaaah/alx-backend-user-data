@@ -52,14 +52,13 @@ def login() -> str:
         abort(401)
 
 @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
+def logout():
     """user destrou session"""
-    session_id = request.cookie.get("session_id")
+    session_id = request.cookies.get("session_id")
     try:
         user = auth.get_user_from_session_id(session_id)
         auth.destroy_session(user.id)
-        if user:
-            redirect(url_for(index))
+        redirect(url_for(index))
     except (NoResultFound, InvalidRequestError):
         abort(403)
 
