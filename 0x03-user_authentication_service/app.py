@@ -53,7 +53,7 @@ def login() -> str:
             abort(401)
 
 
-@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
+@app.route("/sessions", methods=['DELETE'])
 def logout() -> str:
     """User destroys session"""
     if request.method == 'DELETE':
@@ -64,7 +64,7 @@ def logout() -> str:
                 abort(403)
             else:
                 auth.destroy_session(int(user.id))
-                return redirect(url_for('index')), 301
+                return redirect(url_for('index'))
         except (NoResultFound, InvalidRequestError):
             abort(403)
 
