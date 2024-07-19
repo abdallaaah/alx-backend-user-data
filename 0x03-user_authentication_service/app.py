@@ -53,16 +53,18 @@ def login() -> str:
 
 
 @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
-    """user destroyyyyyyyyyyy session"""
+def logout():
+    """User destroys session."""
     session_id = request.cookies.get("session_id")
-
-    user = Auth.get_user_from_session_id(session_id)
-    if user in None:
+    if session_id is None:
         abort(403)
-    Auth.destroy_session(session_id)
-    return redirect("/")
 
+    try:
+        user = auth.get_user_from_session_id(session_id)
+        auth.destroy_session(user.id)
+        return redirect(url_for('index'))  # Assuming you have an endpoint named 'index'
+    except (NoResultFound, InvalidRequestError):
+        abort(403)
 
 
 if __name__ == "__main__":
