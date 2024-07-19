@@ -17,7 +17,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -69,8 +69,6 @@ class DB:
                 for key, value in kwargs.items():
                     if key not in columns:
                         raise ValueError(f"Invalid column name: {key}")
-                    if key == 'session_id':
-                        user.session_id = value
                     setattr(user, key, value)
                 session.commit()
         return None
