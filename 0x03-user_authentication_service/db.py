@@ -61,8 +61,8 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, id: int, **kwargs: Dict[str, Any]) -> None:
-        """Update user"""
+    def update_user(self, id: None, **kwargs: Dict[str, Any]) -> None:
+        """check if user found put the values to user"""
         session = self._session
         user = self.find_user_by(id=id)
         if user:
