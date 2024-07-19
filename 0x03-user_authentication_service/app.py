@@ -82,7 +82,7 @@ def profile() -> str:
         if not user:
             abort(403)
         else:
-            return jsonify({"email": user.email})
+            return jsonify({"email": user.email}), 200
     except (NoResultFound, InvalidRequestError):
         abort(403)
 
