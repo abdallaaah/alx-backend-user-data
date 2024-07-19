@@ -72,7 +72,7 @@ def logout() -> str:
 
 
 @app.route("/profile", methods=['GET'], strict_slashes=False)
-def profile() -> str:
+def profile() -> Response:
     """check profile"""
     session_id = request.cookies.get("session_id")
     if not session_id:
@@ -82,6 +82,7 @@ def profile() -> str:
         if not user:
             abort(403)
         else:
+            print('typpppppppppe', type(jsonify({"email": user.email})))
             return jsonify({"email": user.email}), 200
     except (NoResultFound, InvalidRequestError):
         abort(403)
