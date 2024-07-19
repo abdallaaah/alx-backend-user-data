@@ -10,6 +10,18 @@ app = Flask(__name__)
 auth = Auth()
 
 
+@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
+def logout():
+    """user destrou session"""
+    session_id = request.cookies.get("session_id")
+    try:
+        user = auth.get_user_from_session_id(session_id)
+        auth.destroy_session(user.id)
+        redirect(url_for('index'))
+    except (NoResultFound, InvalidRequestError):
+        abort(403)
+
+
 @app.route("/", methods=['GET'])
 def index():
     """start point of flask"""
@@ -50,17 +62,6 @@ def login() -> str:
         return response, 200
     except (NoResultFound, InvalidRequestError):
         abort(401)
-
-@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-def logout():
-    """user destrou session"""
-    session_id = request.cookies.get("session_id")
-    try:
-        user = auth.get_user_from_session_id(session_id)
-        auth.destroy_session(user.id)
-        redirect(url_for('index'))
-    except (NoResultFound, InvalidRequestError):
-        abort(403)
 
 
 
