@@ -73,10 +73,10 @@ def logout() -> str:
 
 @app.route("/profile", methods=['GET'], strict_slashes=False)
 def profile() -> Response:
-    """check profile"""
-    session_id = request.cookies.get("session_id")
+    """check profile for the route"""
     if not session_id:
         abort(403)
+    session_id = request.cookies.get("session_id")
     try:
         user = auth.get_user_from_session_id(session_id)
         if not user:
