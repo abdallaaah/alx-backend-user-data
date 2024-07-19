@@ -54,8 +54,10 @@ def login() -> str:
 
 
 @app.route("/sessions", methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
-    """User destroys session"""
+def logout():
+    """
+    Log out a logged in user and destroy their session
+    """
     if request.method == 'DELETE':
         session_id = request.cookies.get("session_id")
         try:
