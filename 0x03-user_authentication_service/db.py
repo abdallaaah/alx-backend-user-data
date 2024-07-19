@@ -10,6 +10,8 @@ from sqlalchemy.inspection import inspect
 from typing import Any, Dict
 from user import Base, User
 from sqlalchemy.orm.session import Session
+
+
 class DB:
     """DB class
     """
