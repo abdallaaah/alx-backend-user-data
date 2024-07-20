@@ -38,15 +38,13 @@ def login() -> str:
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
-
+        valid = auth.valid_login(email, password)
         if not auth.valid_login(email, password):
-            print('nyyyyyyyyyyyyyyyyyyyt')
             abort(401)
 
         try:
             session_id = auth.create_session(email)
             if not session_id:
-                print('nooooooooooooooooooot')
                 abort(401)
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)

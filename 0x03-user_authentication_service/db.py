@@ -39,7 +39,6 @@ class DB:
         new_user = User(email=email, hashed_password=hashed_password)
         session.add(new_user)
         session.commit()
-        # self._Session.remove()
         return new_user
 
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
@@ -68,6 +67,7 @@ class DB:
                     Return:
                         - User instance found
                 """
+        print(f"zzzzzzzzzzzz {user_id}")
         session = self._session
         user = self.find_user_by(id=user_id)
         if user:

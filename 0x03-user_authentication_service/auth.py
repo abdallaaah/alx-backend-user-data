@@ -15,10 +15,10 @@ def _hash_password(password: str) -> bytes:
     -> hash the salt
     """
     if password:
-        bytes = password.encode('utf-8')
+        password_bytes = password.encode('utf-8')
         salt = bcrypt.gensalt()
-        hash = bcrypt.hashpw(bytes, salt)
-        return hash
+        hashed_password = bcrypt.hashpw(password_bytes, salt)
+        return hashed_password
 
 
 def _generate_uuid() -> str:
@@ -43,24 +43,19 @@ class Auth:
                 raise ValueError(f'User {email} already exists')
 
         except NoResultFound:
-            hash = _hash_password(password)
-            user = self._db.add_user(email, hash)
+            hashed_password = _hash_password(password)
+            user = self._db.add_user(email, hashed_password)
 
             return user
 
     def valid_login(self, email: str, password: str) -> bool:
-        """Check if the login is valid."""
-        try:
-            user = self._db.find_user_by(email=email)
-            if user:
-                # Compare the provided password with the stored hashed password
-                if bcrypt.checkpw(password.encode('utf-8'),
-                                  user.hashed_password):
-                    return True
-                else:
-                    return False
-        except NoResultFound:
-            return False
+        user = self._db.find_user_by(email=email)
+        if user:
+            password = password.encode('utf-8')
+            if bcrypt.checkpw(password,user.hashed_password):
+                return True
+            else:
+                return False
 
     def create_session(self, email: str) -> str or None:
         """create session is mail is valid"""
@@ -68,9 +63,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
             session_id = _generate_uuid()
             user.session_id = session_id
-            self._db.update_user(id=user.id, session_id=session_id)
-            x = self._db.find_user_by(email=email)
-            print('saveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed', x.session_id)
+            self._db.update_user(user.id, session_id=session_id)
             return session_id
         except (NoResultFound, InvalidRequestError):
             return None
