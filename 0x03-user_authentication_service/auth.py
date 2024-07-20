@@ -99,9 +99,8 @@ class Auth:
             user = self._db.find_user_by(email=email)
             if user is None or email is None:
                 raise ValueError()
-            token = _generate_uuid()
-            setattr(user, reset_token, token)
-            self._db.update_user(user.id, reset_token=token)
+            reset_token = uuid.uuid4()
+            self._db.update_user(user.id, reset_token=reset_token)
             return token
 
         except InvalidRequestError:
