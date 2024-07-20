@@ -35,7 +35,6 @@ def users():
 @app.route("/sessions", methods=['POST'], strict_slashes=False)
 def login() -> str:
     """Log in a user and create a session """
-    print('sssssssssssssss')
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
