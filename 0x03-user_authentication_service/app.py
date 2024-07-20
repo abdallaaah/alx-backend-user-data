@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """app flask point"""
+from auth import Auth
 import flask
 from flask import Flask, jsonify, request, abort, Response, url_for, redirect
-from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 
