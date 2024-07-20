@@ -49,7 +49,8 @@ class Auth:
             return user
 
     def valid_login(self, email: str, password: str) -> bool:
-        """check the password stored hashed password with the password enterd"""
+        """check the password stored hashed
+        password with the password enterd"""
         user = self._db.find_user_by(email=email)
         if user:
             password = password.encode('utf-8')
@@ -95,36 +96,27 @@ class Auth:
         return None
 
     def get_reset_password_token(self, email: str) -> str:
-        """generate session_id"""
-        try:
-            user = self._db.find_user_by(email=email)
-            if user is None or email is None:
-                raise ValueError()
-            reset_token = uuid.uuid4()
-            self._db.update_user(user.id, reset_token=str(reset_token))
-            return reset_token
-
-        except InvalidRequestError:
+        """generate token for password reset and save it in user"""
+        user = self._db.find_user_by(email=email)
+        if user is None or email is None:
             raise ValueError()
-        except InvalidRequestError:
-            raise ValueError()
+        reset_token = _generate_uuid()
+        self._db.update_user(user.id, reset_token=reset_token)
+        return reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
         """updae password if the user have this rest_toke"""
 
         try:
-            user = self._db.find_user_by(reset_token=reset_token)
-            if user is None or email is None:
+            user = self._db.find_user_by(reset_token=str(reset_token))
+            if user is None or reset_token is None:
                 raise ValueError()
             hashed_password = _hash_password(password)
-            user.hashed_password = hashed_password
-            user.reset_token = None
             (self._db.update_user
-             (user.id, hashed_password=hashed_password, reset_token=None))
-            print("you diddddddddddddddddddd it dfknfkdnfk")
+             (user.id, hashed_password=str(hashed_password), reset_token=None))
             return None
 
         except InvalidRequestError:
             raise ValueError()
-        except InvalidRequestError:
+        except NoResultFound:
             raise ValueError()

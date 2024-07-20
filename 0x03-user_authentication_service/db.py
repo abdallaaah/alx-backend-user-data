@@ -39,6 +39,8 @@ class DB:
         new_user = User(email=email, hashed_password=hashed_password)
         session.add(new_user)
         session.commit()
+        print('commiteeeeed')
+        print(new_user)
         return new_user
 
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
