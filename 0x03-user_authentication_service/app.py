@@ -82,14 +82,12 @@ def profile() -> Response:
 @app.route("/reset_password", methods=["POST"], strict_slashes=False)
 def get_reset_password_token():
     """if user regiester return rest password token"""
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     email = request.form.get("email")
     print(email)
     try:
         token = AUTH.get_reset_password_token(email)
         print(token)
         if not token:
-            print(f"the is no tokeeeeen {token}")
             abort(403)
         return jsonify({"email": f"{email}", "reset_token": f"{token}"}), 200
     except ValueError:
