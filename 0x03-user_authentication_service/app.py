@@ -57,7 +57,7 @@ def login() -> str:
         return response, 200
 
 
-@app.route("/sessions", methods=['DELETE'], strict_slashes=False)
+@app.route("/sessions", methods=['DELETE', 'POST'], strict_slashes=False)
 def logout() -> str:
     """
     Log out a logged in user and destroy their session
