@@ -52,7 +52,7 @@ class Auth:
         user = self._db.find_user_by(email=email)
         if user:
             password = password.encode('utf-8')
-            if bcrypt.checkpw(password,user.hashed_password):
+            if bcrypt.checkpw(password, user.hashed_password):
                 return True
             else:
                 return False
@@ -92,3 +92,19 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             return None
         return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """generate session_id"""
+        try:
+            user = self._db.find_user_by(email=email)
+            if user is None or email is None:
+                raise ValueError()
+            token = _generate_uuid()
+            user.reset_token = token
+            self._db.update_user(user.id, reset_token=token)
+            return token
+
+        except InvalidRequestError:
+            raise ValueError()
+        except InvalidRequestError:
+            raise ValueError()
