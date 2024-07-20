@@ -118,7 +118,6 @@ class Auth:
             (self._db.update_user
              (user.id, hashed_password=str(hashed_password), reset_token=None))
             return None
-
         except InvalidRequestError:
             raise ValueError()
         except NoResultFound:
