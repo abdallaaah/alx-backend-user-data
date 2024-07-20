@@ -67,7 +67,6 @@ class DB:
                     Return:
                         - User instance found
                 """
-        print(f"zzzzzzzzzzzz {user_id}")
         session = self._session
         user = self.find_user_by(id=user_id)
         if user:
