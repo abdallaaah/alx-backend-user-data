@@ -100,7 +100,7 @@ class Auth:
             if user is None or email is None:
                 raise ValueError()
             token = _generate_uuid()
-            user.reset_token = token
+            setattr(user, reset_token, token)
             self._db.update_user(user.id, reset_token=token)
             return token
 
