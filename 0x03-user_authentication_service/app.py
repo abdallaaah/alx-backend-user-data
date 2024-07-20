@@ -72,28 +72,11 @@ def logout() -> str:
 @app.route("/profile", methods=['GET'], strict_slashes=False)
 def profile() -> Response:
     """check profile for the route"""
-    session_id = request.cookies.get("session_id")
+    session_id = request.cookies.get("session_id", None)
     user = AUTH.get_user_from_session_id(session_id)
-    print('typeeeeeee', type(session_id))
-    if not session_id:
-        print('aaaaaaaaaaaaaaaaaaaaa')
+    if user is None or session_id is None:
         abort(403)
-
-    try:
-        user = AUTH.get_user_from_session_id(session_id)
-        print('xxxxxxxxxxxxxx', user)
-        if not user:
-            print(f"my session id is {session_id}")
-            print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-
-            abort(403)
-        else:
-            print('typpppppppppe', type(jsonify({"email": user.email})))
-            return jsonify({"email": user.email}), 200
-    except (NoResultFound, InvalidRequestError):
-        print('cccccccccccccccccccccccccccccc')
-
-        abort(403)
+    return jsonify({"email": user.email}), 200
 
 
 if __name__ == "__main__":
