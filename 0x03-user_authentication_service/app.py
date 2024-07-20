@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 
 app = Flask(__name__)
-auth = Auth()
+AUTH = Auth()
 
 
 @app.route("/", methods=['GET'])
@@ -25,7 +25,7 @@ def users():
         password = request.form.get('password')
 
         try:
-            user = auth.register_user(email, password)
+            user = AUTH.register_user(email, password)
             paylod = {"email": email, "message": "user created"}
             return jsonify(paylod)
         except ValueError:
@@ -40,18 +40,18 @@ def login() -> str:
         email = request.form.get("email")
         password = request.form.get("password")
         try:
-            if auth.valid_login(email, password):
+            if AUTH.valid_login(email, password):
                 pass
             else:
                 abort(401)
-            session_id = auth.create_session(email)
+            session_id = AUTH.create_session(email)
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)
             return response, 200
         except NoResultFound:
             abort(401)
 
-        session_id = auth.create_session(email)
+        session_id = AUTH.create_session(email)
         response = jsonify({"email": email, "message": "logged in"})
         response.set_cookie("session_id", session_id)
         return response, 200
@@ -65,11 +65,11 @@ def logout() -> str:
     if request.method == 'DELETE':
         session_id = request.cookies.get("session_id")
         try:
-            user = auth.get_user_from_session_id(str(session_id))
+            user = AUTH.get_user_from_session_id(str(session_id))
             if not user:
                 abort(403)
             else:
-                auth.destroy_session(int(user.id))
+                AUTH.destroy_session(int(user.id))
                 return redirect("/", code=302)
         except (NoResultFound, InvalidRequestError):
             abort(403)
@@ -79,14 +79,14 @@ def logout() -> str:
 def profile() -> Response:
     """check profile for the route"""
     session_id = request.cookies.get("session_id")
-    user = auth.get_user_from_session_id(session_id)
+    user = AUTH.get_user_from_session_id(session_id)
     print('typeeeeeee', type(session_id))
     if not session_id:
         print('aaaaaaaaaaaaaaaaaaaaa')
         abort(403)
 
     try:
-        user = auth.get_user_from_session_id(session_id)
+        user = AUTH.get_user_from_session_id(session_id)
         print('xxxxxxxxxxxxxx', user)
         if not user:
             print(f"my session id is {session_id}")
