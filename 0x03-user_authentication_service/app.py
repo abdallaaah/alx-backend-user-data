@@ -62,15 +62,13 @@ def logout() -> str:
     """
     Log out a logged in user and destroy their session
     """
-    session_id = request.cookies.get("session_id")
-    try:
-        user = AUTH.get_user_from_session_id(str(session_id))
-        AUTH.destroy_session(int(user.id))
-        return redirect("/", code=302)
-    except NoResultFound:
+    session_id = request.cookies.get("session_id"m None)
+    user = AUTH.get_user_from_session_id(str(session_id))
+    if user is None or session_id is None:
         abort(403)
-    except InvalidRequestError:
-        abort(403)
+    AUTH.destroy_session(int(user.id))
+    return redirect('/')
+
 
 
 
