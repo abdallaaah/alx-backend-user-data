@@ -42,7 +42,7 @@ class Auth:
             if user:
                 raise ValueError(f'User {email} already exists')
 
-        except NoResultFound:
+        except (NoResultFound, InvalidRequestError):
             hashed_password = _hash_password(password)
             user = self._db.add_user(email, hashed_password)
 
@@ -100,7 +100,7 @@ class Auth:
             if user is None or email is None:
                 raise ValueError()
             reset_token = uuid.uuid4()
-            self._db.update_user(user.id, reset_token=reset_token)
+            self._db.update_user(user.id, reset_token=str(reset_token))
             return reset_token
 
         except InvalidRequestError:
