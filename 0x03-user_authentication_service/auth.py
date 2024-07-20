@@ -49,6 +49,7 @@ class Auth:
             return user
 
     def valid_login(self, email: str, password: str) -> bool:
+        """check the password stored hashed password with the password enterd"""
         user = self._db.find_user_by(email=email)
         if user:
             password = password.encode('utf-8')
@@ -116,6 +117,8 @@ class Auth:
             if user is None or email is None:
                 raise ValueError()
             hashed_password = _hash_password(password)
+            user.hashed_password = hashed_password
+            user.reset_token = None
             (self._db.update_user
              (user.id, hashed_password=hashed_password, reset_token=None))
             print("you diddddddddddddddddddd it dfknfkdnfk")
