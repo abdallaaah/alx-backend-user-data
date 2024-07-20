@@ -101,7 +101,7 @@ class Auth:
                 raise ValueError()
             reset_token = uuid.uuid4()
             self._db.update_user(user.id, reset_token=reset_token)
-            return token
+            return reset_token
 
         except InvalidRequestError:
             raise ValueError()
