@@ -97,12 +97,15 @@ class Auth:
 
     def get_reset_password_token(self, email: str) -> str:
         """generate token for password reset and save it in user"""
-        user = self._db.find_user_by(email=email)
-        if user is None or email is None:
+        try:
+            user = self._db.find_user_by(email=email)
+            if user is None or email is None:
+                raise ValueError()
+            reset_token = _generate_uuid()
+            self._db.update_user(user.id, reset_token=reset_token)
+            return reset_token
+        except (NoResultFound, InvalidRequestError):
             raise ValueError()
-        reset_token = _generate_uuid()
-        self._db.update_user(user.id, reset_token=reset_token)
-        return reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
         """updae password if the user have this rest_toke"""
