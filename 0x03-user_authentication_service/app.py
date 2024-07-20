@@ -83,10 +83,8 @@ def profile() -> Response:
 def get_reset_password_token():
     """if user regiester return rest password token"""
     email = request.form.get("email")
-    print(email)
     try:
         token = AUTH.get_reset_password_token(email)
-        print(token)
         if not token:
             abort(403)
         return jsonify({"email": f"{email}", "reset_token": f"{token}"}), 200
