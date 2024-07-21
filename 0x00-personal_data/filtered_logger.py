@@ -7,7 +7,7 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-def filter_datum(fields: List, redaction: str, message: str, separator: str) -> str:
+def filter_datum(fields: [str], redaction: str, message: str, separator: str) -> str:
     """that returns the log message obfuscated: """
     for field in fields:
         message = re.sub(
