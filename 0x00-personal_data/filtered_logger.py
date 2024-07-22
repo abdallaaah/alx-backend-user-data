@@ -7,6 +7,7 @@ import logging
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
+
 def get_logger() -> logging.Logger:
     """get logger function"""
     logger = logging.getLogger("user_data")
@@ -16,7 +17,6 @@ def get_logger() -> logging.Logger:
     handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(handler)
     return logger
-
 
 
 def filter_datum(fields: List[str], redaction: str,
