@@ -28,10 +28,11 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
     data_base_name = os.getenv('PERSONAL_DATA_DB_NAME')
     try:
-        connection = mysql.connector.connection.MySQLConnection(host=host,
-                                             database=data_base_name,
-                                             user=username,
-                                             password=password)
+        connection = (mysql.connector.connection.
+                      MySQLConnection(host=host,
+                                      database=data_base_name,
+                                      user=username,
+                                      password=password))
         return connection
     except Error as e:
         print('Error while connecting database', e)
