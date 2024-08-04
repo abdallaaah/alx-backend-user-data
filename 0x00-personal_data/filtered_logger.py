@@ -27,11 +27,12 @@ def get_db() -> MySQLConnection:
     host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
     data_base_name = os.getenv('PERSONAL_DATA_DB_NAME')
     try:
-        connection = mysql.connector.connect(host=host, database=data_base_name, username=username, password=password)
+        connection = mysql.connector.connect(host=host, database=data_base_name, user=username, password=password)
         if connection.is_connected():
             return connection
     except Error as e:
         print('Error while connecting database', e)
+        return None
 
 
 def filter_datum(fields: List[str], redaction: str,
