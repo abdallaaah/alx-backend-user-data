@@ -28,10 +28,11 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
     data_base_name = os.getenv('PERSONAL_DATA_DB_NAME')
     connection = mysql.connector.connect(user=username,
-                                        password=password,
-                                        host=host,
-                                        database=data_base_name)
+                                         password=password,
+                                         host=host,
+                                         database=data_base_name)
     return connection
+
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
