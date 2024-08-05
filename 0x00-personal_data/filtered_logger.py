@@ -10,6 +10,29 @@ from mysql.connector import Error, MySQLConnection
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
+def main():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users")
+    string = []
+    logger = get_logger()
+    field_names = [i[0] for i in cursor.description]
+    for row in cursor:
+        row_dict = dict(zip(field_names, row))
+        user_list = []
+        for key, value in row_dict.items():
+            if (key == 'name' or key == 'email' or
+                    key == 'phone' or key == 'ssn'
+                    or key == 'password'):
+                value = '***'
+            user_list.append(f"{key}={value}")
+        sepaerator = '; '
+        x = sepaerator.join(user_list)
+        logger.log(logging.INFO, x)
+    cursor.close()
+    db.close()
+
+
 def get_logger() -> logging.Logger:
     """get logger function"""
     logger = logging.getLogger("user_data")
@@ -60,3 +83,7 @@ class RedactingFormatter(logging.Formatter):
         """format logger"""
         return filter_datum(self.fields, self.REDACTION,
                             super().format(record), self.SEPARATOR)
+
+
+if __name__ == '__main__':
+    main()
